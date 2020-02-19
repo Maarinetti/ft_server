@@ -20,7 +20,8 @@ COPY /srcs/ssl-params.conf /etc/nginx/snippets/
 
 #grant permissions and change ownership
 RUN	chown -R root /var/www/* && \
-	chmod -R 777 /var/www/ && \
+	chown -R www-data:www-data /var/www/* && \
+	chmod -R 775 /var/www/ && \
 	chmod -R 777 /etc/ssl/ && \
 	chmod -R 777 /etc/nginx/
 
@@ -31,7 +32,7 @@ RUN service mysql start && \
 
 #create ssl certis
 RUN	openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-		-subj "/C=SP/ST=Spain/L=Madrid/O=42Madrid/CN=127.0.0.1" \
+		-subj "/C=SP/ST=Spain/L=Madrid/O=42Madrid/CN=localhost" \
 		-keyout /etc/ssl/private/default.key \
 		-out /etc/ssl/certs/default.crt && \
 	openssl dhparam -out /etc/nginx/dhparam.pem 512
